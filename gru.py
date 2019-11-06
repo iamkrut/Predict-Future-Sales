@@ -55,22 +55,21 @@ print(X_train.shape,y_train.shape,X_test.shape)
 
 # importing libraries required for our model
 from keras.models import Sequential
-from keras.layers import LSTM,Dense,Dropout
+from keras.layers import GRU,Dense,Dropout
 from keras.callbacks import ModelCheckpoint
 
-epochs = 100
+epochs = 300
 # our defining our model 
 my_model = Sequential()
-my_model.add(LSTM(units = 64, activation='tanh', input_shape = (33,1), return_sequences=True))
+my_model.add(GRU(units = 64, activation='tanh', input_shape = (33,1), return_sequences=True))
 my_model.add(Dropout(0.5))
-my_model.add(LSTM(units= 32, activation='tanh'))
+my_model.add(GRU(units= 32, activation='tanh'))
 my_model.add(Dropout(0.5))
 my_model.add(Dense(1))
-
 my_model.compile(loss = 'mse',optimizer = 'rmsprop', metrics = ['mean_squared_error'])
 my_model.summary()
 
-save_best_only = ModelCheckpoint('lstm_model.dth', monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
+save_best_only = ModelCheckpoint('gru_model.dth', monitor='val_loss', verbose=0, save_best_only=False, save_weights_only=False, mode='auto', period=1)
 
 hist = my_model.fit(X_train,y_train,validation_split=0.2, batch_size = 4096,epochs = epochs, callbacks=[save_best_only])
 
@@ -89,7 +88,7 @@ plt.title('loss')
 plt.ylabel('mse')
 plt.xlabel('epoch')
 plt.legend(['train', 'val'], loc='upper left')
-plt.savefig('lstm_loss.png')
+plt.savefig('gru_train_loss.png')
 
 # saving the history
 import json
